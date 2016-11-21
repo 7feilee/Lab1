@@ -5,7 +5,7 @@ import java.util.*;
 public class Calculator
 {
 	//单项式类
-	private static class Monomial
+	public static class Monomial
 	{
 		//表达式中的元素
 		Double coefficient;//系数
@@ -175,8 +175,13 @@ public class Calculator
     }
 
 	//将字符串表达式转换成自定义数据类型
-	static ArrayList<Monomial> expression(String input)
+	public static ArrayList<Monomial> expression(String input)
 	{
+		if(input.length()==0)
+		{
+			System.out.println("Invalid input!");
+			return null;
+		}
 		ArrayList <Monomial> exp = new ArrayList <Monomial> ();//表达式
 
 		String fixedInput = input.replaceAll("\\s+","");
@@ -186,7 +191,7 @@ public class Calculator
 		return exp;
 	}
 	//按照输入的值对表达式进行计算
-	static void simplify(ArrayList <Monomial> exp, String input)
+	public static void simplify(ArrayList <Monomial> exp, String input)
 	{
 		ArrayList <Monomial> result = new ArrayList <Monomial>();
 		HashMap <String,Double> solves = new HashMap <String,Double>();
@@ -251,7 +256,7 @@ public class Calculator
 		print(result);
 	}
 	//对表达式求导
-	static void derivative(ArrayList <Monomial> exp, String input)
+	public static void derivative(ArrayList <Monomial> exp, String input)
 	{
 		ArrayList <Monomial> result = new ArrayList <Monomial>();
 		String assign = input.substring(4).replaceAll("\\s+","");
@@ -261,6 +266,8 @@ public class Calculator
 			return;
 		}
 		int count= 0;//用来计算表达式中是否有这个变量
+		if(exp==null)
+			return;
 		for(int i=0,j=0; j<exp.size(); i++,j++)
 		{
 			Monomial monomial = exp.get(j);//处理一个单项式
@@ -270,13 +277,13 @@ public class Calculator
 			{
 				result.remove(i);
 				count += 1;
+				if(count==exp.size())
+				{
+					System.out.println("Error! no variable!");
+					return;
+				}
 				i--;
 				continue;
-			}
-			if(count==exp.size())
-			{
-				System.out.println("Error! no variable!");
-				return;
 			}
 			for(String var: monomial.vars.keySet())//逐个规定变量
 			{
